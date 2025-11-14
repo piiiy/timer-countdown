@@ -13,6 +13,7 @@ export const SHeader = styled.header`
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  gap: 40px;
 `
 
 const spin = keyframes`
