@@ -55,7 +55,7 @@ export const Timer = React.memo( () => {
     }, [isActive]);
     
 
-    const handleStartPause = useCallback( () => {
+    const handleStartPause = useCallback(() => {
         if (!isActive) {
             setIsActive(true);
         }

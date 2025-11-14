@@ -22,8 +22,8 @@ const ContainerButton = styled.div`
 `;
 
 export const Countdown = React.memo(() => {
-    const [initialTime, setInitialTime] = useState(300);
-    const [remainingTime, setRemaingTime] = useState(300);
+    const [initialTime, setInitialTime] = useState(3);
+    const [remainingTime, setRemaingTime] = useState(3);
     const [isActive, setIsActive] = useState(false);
     
     const FormattedTime = useMemo((): string => {
@@ -59,7 +59,7 @@ export const Countdown = React.memo(() => {
 
     useEffect(() => {
         if (remainingTime === 0 && initialTime > 0) {
-            const audio = new Audio('/sounds/poezd.mp3');
+            const audio = new Audio('/timer-countdown/sounds/poezd.mp3');
             audio.play();
         }
     }, [remainingTime, initialTime]);
