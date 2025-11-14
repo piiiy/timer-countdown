@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/timer-countdown/static/js/main.afcc2d42.js",
+    "index.html": "/timer-countdown/index.html",
+    "main.afcc2d42.js.map": "/timer-countdown/static/js/main.afcc2d42.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.afcc2d42.js"
+  ]
+}
