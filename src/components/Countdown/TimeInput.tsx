@@ -64,7 +64,7 @@ const SliderContainer = styled.div`
     padding: 0 10px;
 `;
 
-export const TimeInput = ({onTimeChange, isActive}: TimeInputProps) => {
+export const TimeInput: React.FC<TimeInputProps> = React.memo(({ onTimeChange, isActive }) => {
     const [seconds, setSeconds] = useState<number>(0);
     const [minutes, setMinutes] = useState<number>(0);
 
@@ -117,4 +117,4 @@ export const TimeInput = ({onTimeChange, isActive}: TimeInputProps) => {
             </SliderContainer>
         </InputContainer>
     );
-};
+});

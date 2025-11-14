@@ -7,7 +7,7 @@ interface TimerSliderProps {
     
 }
 
-export const TimerSlider = ({ value, onChange, disabled }: TimerSliderProps) => {
+export const TimerSlider: React.FC<TimerSliderProps> = React.memo(({ value, onChange, disabled }) => {
     return (
         <input
             type="range"
@@ -19,4 +19,4 @@ export const TimerSlider = ({ value, onChange, disabled }: TimerSliderProps) => 
             disabled={disabled} 
         />
     );
-};
+});

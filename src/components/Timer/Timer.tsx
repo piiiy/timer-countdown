@@ -22,7 +22,7 @@ const TimerContainerButton = styled.div`
 `;
 
 
-export const Timer = React.memo( () => {
+export const Timer: React.FC = React.memo(() => {
     const [time, setTime] = useState(0);
     const [isActive, setIsActive] = useState(false);
 

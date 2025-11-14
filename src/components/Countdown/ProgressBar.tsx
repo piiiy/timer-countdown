@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import React from "react";
 
 const ProgressContainer = styled.div`
     width: 100%;
@@ -19,7 +20,7 @@ interface ProgressBarProps {
     initialTime: number;
 }
 
-export const ProgressBar = ({ currentTime, initialTime }: ProgressBarProps) => {
+export const ProgressBar: React.FC<ProgressBarProps> = React.memo(({ currentTime, initialTime }) => {
     const progress = (currentTime / initialTime) * 100;
     
     return (
@@ -28,4 +29,4 @@ export const ProgressBar = ({ currentTime, initialTime }: ProgressBarProps) => {
                           $color="#18609b"/>
         </ProgressContainer>
     );
-};
+});

@@ -21,9 +21,9 @@ const ContainerButton = styled.div`
     gap: 5px;
 `;
 
-export const Countdown = React.memo(() => {
-    const [initialTime, setInitialTime] = useState(3);
-    const [remainingTime, setRemaingTime] = useState(3);
+export const Countdown: React.FC = React.memo(() => {
+    const [initialTime, setInitialTime] = useState(0);
+    const [remainingTime, setRemaingTime] = useState(0);
     const [isActive, setIsActive] = useState(false);
     
     const FormattedTime = useMemo((): string => {
