@@ -38,21 +38,18 @@ export const Timer: React.FC = React.memo(() => {
         return `${formattedMinute}:${formattedSeconds}:${formateedMillisec}`;
     }, [time]);
 
+    
     useEffect(() => {
-        let interval: NodeJS.Timeout;
-
         if (isActive === true) {
-            interval = setInterval(() => {
-                setTime(prevTime => prevTime + 100)
-            }, 100);
+            const idInterval = setInterval(() => {
+                setTime((t) =>  t + 100);
+            }, 100)
+            
+            return () => {
+                clearInterval(idInterval);
+                }
         }
-
-        return () => {
-            if (interval) { 
-                clearInterval(interval);
-            }
-        }
-    }, [isActive]);
+    }, [isActive])
     
 
     const handleStartPause = useCallback(() => {
@@ -75,8 +72,7 @@ export const Timer: React.FC = React.memo(() => {
 
     }, [time]);
 
-    const buttonText = time === 0 && !isActive ? 'START' : 
-                       isActive ? 'PAUSE' : 'RESUME'; 
+    const buttonText = time === 0 && !isActive ? 'START' : isActive ? 'PAUSE' : 'RESUME'; 
 
 
     return (

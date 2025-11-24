@@ -1,9 +1,9 @@
-import React, {useEffect, useState, useCallback, useMemo} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import styled from "styled-components";
-import { TimeInput } from "./TimeInput";
-import { ProgressBar } from "./ProgressBar";
+import { InputTime } from "./InputTime";
+import { Progress } from "./Progress";
 
-const ContainerCountdown = styled.div`
+const CountdownContaier = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,7 +13,7 @@ const ContainerCountdown = styled.div`
     box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     font-family: 'Roboto', sans-serif;
-`;
+`
 
 const ContainerButton = styled.div`
     display: flex;
@@ -21,85 +21,94 @@ const ContainerButton = styled.div`
     gap: 5px;
 `;
 
-export const Countdown: React.FC = React.memo(() => {
-    const [initialTime, setInitialTime] = useState(0);
-    const [remainingTime, setRemaingTime] = useState(0);
-    const [isActive, setIsActive] = useState(false);
+export const Countdown: React.FC = () => {
+    const [initialTime, setInitialTime] = useState (0);
+    const [remainingTime, setRemainingTime] = useState(0);
+    const [active, setActive] = useState(false);
+    const [isReset, setIsReset] = useState(false);
     
-    const FormattedTime = useMemo((): string => {
-       const minute = Math.floor(remainingTime / 60);
-        const seconds = Math.floor(remainingTime % 60);
-        const formattedMinute = String(minute).padStart(2, '0');
-        const formattedSeconds = String(seconds).padStart(2, '0');
 
-        return `${formattedMinute}:${formattedSeconds}`;
-    }, [remainingTime]);
-
-
-    useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isActive) {
-        interval = setInterval(() => {
-            setRemaingTime(prevTime => {
-                if (prevTime <= 0) {
-                    setIsActive(false);
-                    return 0;
-                }
-                return prevTime - 1;
-            });
-        }, 1000);
+    const correctTime = (time: number) => {
+        const min = String(Math.floor(time/60)).padStart(2, '0');
+        const sec = String(Math.floor(time%60)).padStart(2, '0');
+        return `${min}:${sec}`;
     }
 
-    return () => {
-        if (interval) {
-            clearInterval(interval);
+    useEffect(() => {
+        if (active === true) {
+            const interval = setInterval(() => {
+                setRemainingTime((t) => {
+                    if (t === 0) {
+                        clearInterval(interval);
+                        setActive(false);
+                        setInitialTime(0);
+                        setIsReset(true);
+                        return 0;
+                    }
+
+                    return t - 1;
+                })
+            }, 1000)
+
+            return () => {
+                clearInterval(interval);
+            }
         }
-    };
-    }, [isActive]);
+    }, [active])
+
+
 
     useEffect(() => {
-        if (remainingTime === 0 && initialTime > 0) {
-            const audio = new Audio('/timer-countdown/sounds/poezd.mp3');
-            audio.play();
+        if (initialTime > 0 && remainingTime === 0) {
+            const bmwSound = new Audio ('/timer-countdown/sounds/bmw.mp3');
+            bmwSound.play();
         }
-    }, [remainingTime, initialTime]);
+    }, [initialTime, remainingTime])
+   
+   
 
-
-    const handleStartPause = useCallback(() => {
-        setIsActive(!isActive);
-    }, [isActive]);
-
-    const handleReset = useCallback(() => {
-        setIsActive(false);
-        setRemaingTime(initialTime);
-    }, [initialTime]);
-
-    const buttonText = !isActive && remainingTime === initialTime ? 'START' : 
-                   isActive ? 'PAUSE' : 'RESUME';
-
-    const handleTimeChange = (totalSeconds: number) => {
-        setInitialTime(totalSeconds);
-        setRemaingTime(totalSeconds);
+    const handleChangeStart = () => {
+        setActive(!active);
     };
-    
+
+    const handleChangeReset = () => {
+        setInitialTime(0);
+        setRemainingTime(0);
+        setActive(false);
+        setIsReset(true);
+    };
+
+    const buttonText = !active && initialTime === remainingTime ? 'START' : active ? 'PAUSE' : 'RESUME';
+
+    const totalTime = useCallback((totalSec: number) => {
+            setInitialTime(totalSec);
+            setRemainingTime(totalSec);
+    }, []);
+
 
     return (
-        <ContainerCountdown>
-            <h1>Countdown</h1>
-            <TimeInput
-             onTimeChange={handleTimeChange}
-             isActive={isActive}/>
-            <div>{FormattedTime}</div>
-            <ProgressBar 
-                currentTime={remainingTime}
-                initialTime={initialTime}
-            />
+        <CountdownContaier>
+            <div>Countdown</div>
+            <div>{correctTime(remainingTime)}</div>
+            <InputTime
+            totalTime={totalTime}
+            active={active}
+            isReset={isReset}
+            setIsReset={setIsReset}
+            />      
+            <Progress
+            initialTime={initialTime}
+            remaningTime={remainingTime}
+            />    
             <ContainerButton>
-                <button onClick={handleStartPause}>{buttonText}</button>
-                <button onClick={handleReset}>RESET</button>
+                <button
+                disabled={initialTime === 0}
+                onClick={handleChangeStart}
+                >{buttonText}</button>
+                <button
+                onClick={handleChangeReset}
+                >RESET</button>
             </ContainerButton>
-
-        </ContainerCountdown>
+        </CountdownContaier>
     );
-    
-});
+}

@@ -8,7 +8,7 @@ function App() {
         <SApp>
             <SHeader>
                 <Timer/>
-                <Countdown/>
+                <Countdown/> 
             </SHeader>
            
         </SApp>
